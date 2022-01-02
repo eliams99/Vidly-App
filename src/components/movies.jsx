@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { deleteMovie, getMovies } from "../services/fakeMovieService";
+import Like from "./common/like.jsx";
 
 class Movies extends Component {
   state = {
@@ -13,6 +14,15 @@ class Movies extends Component {
     // deleteMovie(movie);
   };
 
+  handleLike = (movie) => {
+    const movies = [...this.state.movies];
+    const index = movies.indexOf(movie);
+    movies[index] = { ...movies[index] };
+    movies[index].liked = !movies[index].liked;
+    this.setState({ movies });
+    // Qui posso chiamare anche il server per aggiornare i dati
+  };
+
   render() {
     const { length: count } = this.state.movies;
 
@@ -21,7 +31,7 @@ class Movies extends Component {
     return (
       <React.Fragment>
         <p>Showing {count} movies in the database.</p>
-        <table class="table">
+        <table className="table">
           <thead>
             <tr>
               {this.state.thead.map((name) => (
@@ -29,6 +39,8 @@ class Movies extends Component {
                   {name}
                 </th>
               ))}
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="tableBody">
@@ -39,8 +51,14 @@ class Movies extends Component {
                 <td>{movie.numberInStock}</td>
                 <td>{movie.dailyRentalRate}</td>
                 <td>
+                  <Like
+                    liked={movie.liked}
+                    onClick={() => this.handleLike(movie)}
+                  />
+                </td>
+                <td>
                   <button
-                    class="btn btn-danger"
+                    className="btn btn-danger"
                     onClick={() => this.handleDelete(movie)}
                   >
                     Delete
