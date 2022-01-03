@@ -28,6 +28,7 @@ const Pagination = (props) => {
   );
 };
 
+// Per evitare gli errori nel passaggio dei props
 Pagination.propTypes = {
   itemsCount: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
