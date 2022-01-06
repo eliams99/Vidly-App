@@ -1,13 +1,13 @@
 import React from "react";
 
-const ListGroup = (props) => {
-  const {
-    items,
-    textProperty,
-    valueProperty,
-    selectedItem,
-    onItemSelect,
-  } = props; // textProperty e valueProperty permettono di astrarre la lisGroup
+const ListGroup = ({
+  items,
+  textProperty,
+  valueProperty,
+  selectedItem,
+  onItemSelect,
+}) => {
+  // textProperty e valueProperty permettono di astrarre la listGroup
 
   return (
     <ul className="list-group">
