@@ -1,6 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
+import { Redirect } from "react-router-dom";
 import Form from "./common/form";
 import Joi from "joi-browser";
+import auth from "../services/authService";
 
 class LoginForm extends Form {
   state = {
@@ -13,12 +15,26 @@ class LoginForm extends Form {
     password: Joi.string().required().label("Password"),
   };
 
-  doSubmit = () => {
-    // Call the server
-    console.log("Submitted");
+  doSubmit = async () => {
+    try {
+      const { data } = this.state;
+      await auth.login(data.username, data.password);
+
+      const { state } = this.props.location;
+      window.location = state ? state.from.pathname : "/";
+      // window.location = "/"; // Al posto di this.props.history.push("/") perché vogliamo un full reload (così compare il nome nella navbar)
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.username = ex.response.data;
+        this.setState({ errors });
+      }
+    }
   };
 
   render() {
+    if (auth.getCurrentUser()) return <Redirect to="/" />;
+
     return (
       <div>
         <h1>Login</h1>
